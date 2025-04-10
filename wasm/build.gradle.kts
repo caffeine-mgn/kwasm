@@ -32,7 +32,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-//                api(libs.binom.io.core)
+                api(libs.binom.io.core)
             }
         }
         commonTest.dependencies {

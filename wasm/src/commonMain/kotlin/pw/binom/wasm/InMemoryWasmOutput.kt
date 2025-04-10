@@ -65,18 +65,8 @@ class InMemoryWasmOutput : ByteArrayOutput(), WasmOutput {
     }
 
     fun moveTo(out: WasmOutput) {
-        if (RECORDING) {
-            when (out) {
-                is StreamWriter -> out.callback.addAll(stream.callback)
-                is InMemoryWasmOutput -> out.stream.callback.addAll(stream.callback)
-                else -> TODO()
-            }
-        }
         locked {
             out.write(it)
-        }
-        if (RECORDING) {
-            stream.callback.clear()
         }
         clear()
     }
