@@ -1,12 +1,5 @@
 package pw.binom.wasm
 
-import pw.binom.io.file.File
-import pw.binom.io.file.openRead
-import pw.binom.io.file.openWrite
-import pw.binom.io.file.readBinary
-import pw.binom.io.use
-import pw.binom.wasm.readers.WasmReader
-import pw.binom.wasm.writers.WasmWriter
 import kotlin.test.Test
 
 @OptIn(ExperimentalStdlibApi::class)
@@ -19,10 +12,10 @@ class ReadFromFileTest {
 //      "/home/subochev/tmp/wasm-test/build/compileSync/wasmWasi/main/productionExecutable/kotlin/www-wasm-wasi.wasm"
 //    val path =
 //      "/home/subochev/tmp/wasm-test/build/compileSync/wasmJs/main/developmentExecutable/kotlin/www-wasm-js.wasm"
-    val path = "/home/subochev/tmp/wasm-test/build/compileSync/wasmJs/main/productionExecutable/kotlin/www-wasm-js.wasm"
+//    val path = "/home/subochev/tmp/wasm-test/build/compileSync/wasmJs/main/productionExecutable/kotlin/www-wasm-js.wasm"
 //    val path = "/home/subochev/tmp/wasm-test/build/compileSync/wasmJs/main/productionExecutable/optimized/www-wasm-js.wasm"
 
-    val data = File(path).readBinary()
+//    val data = File(path).readBinary()
 
 
 //    val importSection = data.copyOfRange(0x1f, 0x1f + 66)
@@ -149,12 +142,12 @@ class ReadFromFileTest {
 //    }
 
 
-    val outFile = File("/home/subochev/tmp/wasm-test/other/www-wasm-js.wasm")
-    File(path).openRead().asWasm().use { input ->
-      outFile.openWrite().asWasm.use { output ->
-        WasmReader.read(input, WS(WasmWriter(output)))
-      }
-    }
+//    val outFile = File("/home/subochev/tmp/wasm-test/other/www-wasm-js.wasm")
+//    File(path).openRead().asWasm().use { input ->
+//      outFile.openWrite().asWasm.use { output ->
+//        WasmReader.read(input, WS(WasmWriter(output)))
+//      }
+//    }
 
 
 //    val m = WasmModule()

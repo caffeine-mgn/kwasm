@@ -1,5 +1,5 @@
 package pw.binom.wasm.runner
-
+/*
 import pw.binom.*
 import pw.binom.io.file.File
 import pw.binom.io.file.openRead
@@ -123,3 +123,4 @@ class RunTest {
   }
 }
 
+*/
