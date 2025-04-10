@@ -7,47 +7,20 @@ import pw.binom.reverse
 import pw.binom.writeInt
 import pw.binom.writeLong
 
-const val RECORDING = false
 val Output.asWasm
     get() = StreamWriter(this)
 
-class CallbackRecord(val stacktract: String, val msg: String?, val num: Int) {
-    override fun toString(): String = "#$num: $msg $stacktract"
-}
-
 class StreamWriter(val out: Output) : WasmOutput {
-    val callback = LinkedList<CallbackRecord>()
-    private var recording = false
     private var msg: String? = null
 
     private val buffer = ByteBuffer(16)
 
     private inline fun <T> recording(msg: String? = null, a: () -> T): T {
-        if (!RECORDING) {
             return a()
-        }
-        recording = true
-        this.msg = msg
-        val result = a()
-        this.msg = null
-        recording = false
-        return result
     }
 
     override fun write(data: ByteBuffer): DataTransferSize {
         if (data.hasRemaining) {
-            if (recording && RECORDING) {
-                val s = Throwable().stackTraceToString()
-                var index = 0
-                data.forEach { byte ->
-                    callback += CallbackRecord(
-                        stacktract = s,
-                        num = index,
-                        msg = msg,
-                    )
-                    index++
-                }
-            }
         }
         val e = out.write(data)
         return e

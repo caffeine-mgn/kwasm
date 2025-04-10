@@ -7,7 +7,18 @@ plugins {
   id("maven-publish")
 }
 kotlin {
-  allTargets()
+  allTargets{
+    -"watchosArm64"
+    -"watchosX64"
+    -"watchosDeviceArm64"
+    -"iosX64"
+    -"watchosSimulatorArm64"
+    -"watchosArm32"
+    -"tvosSimulatorArm64"
+    -"tvosArm64"
+    -"iosArm64"
+    -"iosSimulatorArm64"
+  }
   applyDefaultHierarchyTemplate()
   sourceSets {
     commonMain.dependencies {
