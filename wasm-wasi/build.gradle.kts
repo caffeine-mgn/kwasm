@@ -5,12 +5,11 @@ plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.binom.publish)
   id("maven-publish")
-//  if (pw.binom.Target.ANDROID_JVM_SUPPORT) {
-//    id("com.android.library")
-//  }
 }
 kotlin {
-  wasmWasi()
+  wasmWasi {
+    nodejs()
+  }
   applyDefaultHierarchyTemplate()
   sourceSets {
     commonMain.dependencies {
