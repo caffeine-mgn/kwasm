@@ -90,6 +90,13 @@ abstract class BasicTokenizer : Tokenizer {
                 internalType = TokenType.LESS
             }
 
+            char == '/' -> {
+                internalStart = position
+                internalEnd = position
+                internalText = "/"
+                internalType = TokenType.DIV
+            }
+
             char == '>' -> {
                 internalStart = position
                 internalEnd = position
@@ -188,7 +195,12 @@ abstract class BasicTokenizer : Tokenizer {
         buffer.push(char)
         val sb = StringBuilder()
         while (true) {
-            val e = readChar()
+            val e = try {
+                readChar()
+            } catch (e: Tokenizer.EOFException) {
+                internalText = sb.toString()
+                break
+            }
             if (!e.isSpace()) {
                 buffer.push(e)
                 internalText = sb.toString()

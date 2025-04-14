@@ -10,6 +10,7 @@ interface Tokenizer {
     val end: Int
     val length: Int
         get() = (end - start) + 1
+
     fun next(): Boolean
 
     fun assertType(type: TokenType) {
@@ -39,5 +40,28 @@ interface Tokenizer {
                 return true
             }
         } while (true)
+    }
+
+    fun readFullMultiline() {
+        var count = 1
+        val sb = StringBuilder()
+        while (next()) {
+            when (type) {
+                TokenType.MULTI_LINE_COMMENT_START -> {
+                    count++
+                    sb.append(text)
+                }
+
+                TokenType.MULTI_LINE_COMMENT_END -> {
+                    count--
+                    if (count == 0) {
+                        break
+                    }
+                    sb.append(text)
+                }
+
+                else -> continue
+            }
+        }
     }
 }

@@ -29,6 +29,9 @@ object InterfaceReader {
 //                    else -> TODO("type=${tokenizer.type} text=${tokenizer.text} start=${tokenizer.start}")
                 }
 
+                TokenType.AT -> AnnotationReader.read(tokenizer, visitor.annotation())
+                TokenType.LINE_COMMENT -> visitor.lineComment(tokenizer.text.substring(2))
+
                 else -> TODO("type=${tokenizer.type} text=${tokenizer.text} start=${tokenizer.start}")
             }
         }

@@ -28,7 +28,7 @@ class ResultWriter(protected val sb: TextWriter) : ResultVisitor {
 
     override fun second(): TypeVisitor {
         check(status == STATUS_FIRST)
-        sb.append(",")
+        sb.append(", ")
         status = STATUS_SECOND
         return TypeWriter(sb)
     }

@@ -18,12 +18,24 @@ object WorldReader {
                 TokenType.WORD -> when (tokenizer.text) {
                     "export" -> WorldElementReader.read(tokenizer, visitor.export())
                     "import" -> WorldElementReader.read(tokenizer, visitor.import())
+                    "include" -> parseInclude(tokenizer, visitor)
                     else -> TODO()
                 }
+
+                TokenType.LINE_COMMENT -> visitor.lineComment(tokenizer.text.substring(2))
+                TokenType.AT -> AnnotationReader.read(tokenizer, visitor.annotation())
 
                 else -> TODO()
             }
         }
         visitor.end()
+    }
+
+    private fun parseInclude(tokenizer: BasicTokenizer, visitor: WorldVisitor) {
+        tokenizer.nextNotSpaceOrEof()
+        tokenizer.assertType(TokenType.WORD)
+        visitor.include(tokenizer.text)
+        tokenizer.nextNotSpaceOrEof()
+        tokenizer.assertType(TokenType.TERMINATOR)
     }
 }

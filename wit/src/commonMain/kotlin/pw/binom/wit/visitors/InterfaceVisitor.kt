@@ -1,6 +1,6 @@
 package pw.binom.wit.visitors
 
-interface InterfaceVisitor {
+interface InterfaceVisitor:BaseVisitor {
     fun start(name: String)
     fun typeAlias(): TypeAliasVisitor
     fun record(): RecordVisitor
@@ -8,6 +8,7 @@ interface InterfaceVisitor {
     fun enum(): EnumVisitor
     fun resource(): ResourceVisitor
     fun variant(): VariantVisitor
+    fun annotation(): AnnotationVisitor
     fun func(name: String): FuncVisitor
     fun end()
 }

@@ -1,6 +1,25 @@
 package pw.binom.wit.parser
 
-class BufferedTokenizer(val source: Tokenizer) : Tokenizer {
+import pw.binom.wit.utils.CircularCounter
+
+class BufferedTokenizer(val size: Int, val source: Tokenizer) : Tokenizer {
+
+    private val counter = CircularCounter(capacity = size)
+    private val tokens = arrayOfNulls<Token>(size)
+    private var cursor = counter.headCursor
+
+    private fun currentToken() {
+
+    }
+
+    private fun putToken() {
+        tokens[counter.push()] = Token(
+            type = source.type,
+            text = source.text,
+            start = source.start,
+            end = source.end,
+        )
+    }
 
     private data class Token(
         val type: TokenType,

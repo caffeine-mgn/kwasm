@@ -1,9 +1,12 @@
 package pw.binom.wit.visitors
 
 interface TupleVisitor {
-    fun start()
-    fun first(): TypeVisitor
-    fun second(): TypeVisitor
-    fun third(): TypeVisitor
-    fun end()
+    companion object {
+        val EMPTY: TupleVisitor = object : TupleVisitor {}
+    }
+    fun start() {}
+    fun first(): TypeVisitor = TypeVisitor.EMPTY
+    fun second(): TypeVisitor = TypeVisitor.EMPTY
+    fun third(): TypeVisitor = TypeVisitor.EMPTY
+    fun end() {}
 }

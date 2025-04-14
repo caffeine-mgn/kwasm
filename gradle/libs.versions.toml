@@ -2,14 +2,16 @@
 kotlin = "2.1.10"
 binom-io = "1.0.0-SNAPSHOT"
 binom-publish = "0.1.23"
-antlr="1.0.0"
+antlr = "1.0.0"
 
 [libraries]
 binom-io-core = { module = "pw.binom.io:core", version.ref = "binom-io" }
 binom-io-file = { module = "pw.binom.io:file", version.ref = "binom-io" }
-antlr = {module="com.strumenta:antlr-kotlin-runtime",version.ref = "antlr"}
+antlr = { module = "com.strumenta:antlr-kotlin-runtime", version.ref = "antlr" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 binom-publish = { id = "pw.binom.publish", version.ref = "binom-publish" }
 antlr = { id = "com.strumenta.antlr-kotlin", version.ref = "antlr" }
+gradle-plugin-publish = { id = "com.gradle.plugin-publish", version = "0.16.0" }

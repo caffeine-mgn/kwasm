@@ -64,6 +64,17 @@ class InterfaceWriter(private val sb: TextWriter) : InterfaceVisitor {
         return VariantWriter(sb)
     }
 
+    override fun annotation(): AnnotationVisitor =
+        AnnotationWriter(sb)
+
+    override fun lineComment(text: String) {
+        sb.append("//").append(text).appendLine()
+    }
+
+    override fun multilineComment(text: String) {
+        sb.append("/*").append(text).append("*/")
+    }
+
     override fun func(name: String): FuncVisitor {
         check(status == NAME || status == ELEMENTS)
         status = ELEMENTS

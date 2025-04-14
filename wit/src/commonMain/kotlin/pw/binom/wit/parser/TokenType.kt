@@ -21,4 +21,5 @@ enum class TokenType {
     LESS,
     GREATER,
     RESULT,
+    DIV,
 }

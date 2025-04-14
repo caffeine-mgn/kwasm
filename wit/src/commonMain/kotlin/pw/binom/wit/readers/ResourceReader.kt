@@ -17,7 +17,7 @@ object ResourceReader {
                 TokenType.CLOSE_BRACE -> break
                 TokenType.WORD -> {
                     when (tokenizer.text) {
-                        "constructor" -> ConstructorReader.read(tokenizer, visitor.constructor())
+                        "constructor" -> ConstructorReader.read(tokenizer, visitor.init())
                         else -> readFunc(tokenizer, visitor)
                     }
                 }

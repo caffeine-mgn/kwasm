@@ -12,4 +12,17 @@ class WorldElementWriter(private val sb: TextWriter) : WorldElementVisitor {
         sb.append(name).append(": func")
         return FuncWriter(sb)
     }
+
+    override fun externalInterface(
+        packageModule: String,
+        packageName: String,
+        interfaceName: String,
+        version: String?,
+    ) {
+        sb.append(packageModule).append(":").append(packageName).append("/").append(interfaceName)
+        if (version != null) {
+            sb.append("@").append(version)
+        }
+        sb.append(";").appendLine()
+    }
 }

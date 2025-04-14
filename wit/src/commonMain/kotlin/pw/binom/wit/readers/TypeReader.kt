@@ -21,9 +21,9 @@ object TypeReader {
             "char" -> visitor.char()
             "string" -> visitor.string()
             "list" -> ListReader.read(tokenizer, visitor.list())
-            "result" -> TODO()
+            "result" -> ResultReader.read(tokenizer, visitor.result())
             "tuple" -> TODO()
-            "option" -> TODO()
+            "option" -> OptionReader.read(tokenizer, visitor.option())
             else -> visitor.id(tokenizer.text)
         }
     }

@@ -9,7 +9,7 @@ class ResourceWriter(private val sb: TextWriter) : ResourceVisitor {
         sb.append("resource ").append(name).append(" {").appendLine().levelInc()
     }
 
-    override fun constructor(): ConstructorVisitor {
+    override fun init(): ConstructorVisitor {
         sb.append("constructor")
         val visitor = ConstructorWriter(sb)
         return object : ConstructorVisitor by visitor {

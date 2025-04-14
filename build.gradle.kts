@@ -1,5 +1,8 @@
 allprojects {
     group = "pw.binom.wasm"
+    if (version == "unspecified") {
+        version = "1.0.0-SNAPSHOT"
+    }
 
     repositories {
         mavenLocal()

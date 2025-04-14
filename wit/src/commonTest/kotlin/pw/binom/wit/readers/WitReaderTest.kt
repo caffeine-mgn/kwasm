@@ -1,11 +1,14 @@
 package pw.binom.wit.readers
 
+import pw.binom.io.file.File
+import pw.binom.io.file.readText
 import pw.binom.wit.parser.BasicTokenizerTest
 import pw.binom.wit.writers.PrettyTextWriter
 import pw.binom.wit.writers.WitWriter
+import kotlin.js.JsFileName
 import kotlin.test.Test
 
-class WitParserTest {
+class WitReaderTest {
     val text = """
         package binom:pipeline@0.2.5;
 
@@ -47,10 +50,13 @@ class WitParserTest {
 
     @Test
     fun parseTest() {
+//        val text = File("/tmp/ff/wasi-http/wit/proxy.wit").readText()
+//        val text = File("/tmp/ff/wasi-http/wit/handler.wit").readText()
+        val text = File("/tmp/ff/wasi-http/wit/types.wit").readText()
         val sb = StringBuilder()
         val w = PrettyTextWriter(sb)
         try {
-            WitParser.parse(BasicTokenizerTest.StringTokenizer(text), WitWriter(w))
+            WitReader.parse(BasicTokenizerTest.StringTokenizer(text), WitWriter(w))
         } finally {
             println(sb.toString())
         }

@@ -1,7 +1,11 @@
 package pw.binom.wit.visitors
 
 interface OptionVisitor {
-    fun start()
-    fun type(): TypeVisitor
-    fun end()
+    companion object {
+        val EMPTY: OptionVisitor = object : OptionVisitor {}
+    }
+
+    fun start() {}
+    fun type(): TypeVisitor = TypeVisitor.EMPTY
+    fun end() {}
 }

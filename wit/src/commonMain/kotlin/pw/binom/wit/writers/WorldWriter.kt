@@ -1,5 +1,6 @@
 package pw.binom.wit.writers
 
+import pw.binom.wit.visitors.AnnotationVisitor
 import pw.binom.wit.visitors.FuncVisitor
 import pw.binom.wit.visitors.WorldElementVisitor
 import pw.binom.wit.visitors.WorldVisitor
@@ -19,6 +20,11 @@ class WorldWriter(private val sb: TextWriter) : WorldVisitor {
         return build()
     }
 
+    override fun annotation(): AnnotationVisitor = AnnotationWriter(sb)
+    override fun include(worldName: String) {
+        sb.append("include ").append(worldName).append(";").appendLine()
+    }
+
     private fun build(): WorldElementVisitor {
         val visitor = WorldElementWriter(sb)
         return object : WorldElementVisitor {
@@ -36,7 +42,20 @@ class WorldWriter(private val sb: TextWriter) : WorldVisitor {
                     }
                 }
             }
+
+            override fun externalInterface(
+                packageModule: String,
+                packageName: String,
+                interfaceName: String,
+                version: String?,
+            ) {
+                visitor.externalInterface(packageModule, packageName, interfaceName, version)
+            }
         }
+    }
+
+    override fun lineComment(text: String) {
+        sb.append("//").append(text).appendLine()
     }
 
     override fun end() {

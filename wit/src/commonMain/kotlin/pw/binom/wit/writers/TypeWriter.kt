@@ -42,6 +42,14 @@ class TypeWriter(private val sb: TextWriter) : TypeVisitor {
         sb.append("s64")
     }
 
+    override fun f32() {
+        sb.append("f32")
+    }
+
+    override fun f64() {
+        sb.append("f64")
+    }
+
     override fun string() {
         sb.append("string")
     }
