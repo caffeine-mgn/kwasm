@@ -2,10 +2,11 @@ package pw.binom.wit.readers
 
 import pw.binom.wit.parser.TokenType
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.BufferedTokenizer
 import pw.binom.wit.visitors.ConstructorVisitor
 
 object ConstructorReader {
-    fun read(tokenizer: BasicTokenizer, visitor: ConstructorVisitor) {
+    fun read(tokenizer: BufferedTokenizer, visitor: ConstructorVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.OPEN_PAREN)
         visitor.start()

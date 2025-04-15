@@ -1,9 +1,6 @@
 package pw.binom.wit.node
 
-import pw.binom.wit.visitors.ConstructorVisitor
-import pw.binom.wit.visitors.FuncVisitor
-import pw.binom.wit.visitors.InterfaceVisitor
-import pw.binom.wit.visitors.ResourceVisitor
+import pw.binom.wit.visitors.*
 
 class ResourceNode(var name: String, var list: List<Item>) : ResourceVisitor, InterfaceElement {
     private var argsList: ArrayList<Item>? = null
@@ -48,6 +45,8 @@ class ResourceNode(var name: String, var list: List<Item>) : ResourceVisitor, In
         argsList!! += Item.Constructor(r)
         return r
     }
+
+    override fun annotation(): AnnotationVisitor = AnnotationVisitor.EMPTY
 
     override fun func(name: String): FuncVisitor {
         val r = FuncNode(name, emptyList(), FunctionResult.VoidResult)

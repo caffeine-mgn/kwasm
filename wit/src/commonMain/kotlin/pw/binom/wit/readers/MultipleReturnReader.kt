@@ -2,10 +2,12 @@ package pw.binom.wit.readers
 
 import pw.binom.wit.parser.TokenType
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.BufferedTokenizer
+import pw.binom.wit.parser.Tokenizer
 import pw.binom.wit.visitors.MultipleReturnVisitor
 
 object MultipleReturnReader {
-    fun read(tokenizer: BasicTokenizer, visitor: MultipleReturnVisitor) {
+    fun read(tokenizer: BufferedTokenizer, visitor: MultipleReturnVisitor) {
         visitor.start()
         while (true) {
             tokenizer.nextNotSpaceOrEof()

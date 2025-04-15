@@ -1,5 +1,6 @@
 package pw.binom.wit.writers
 
+import pw.binom.wit.visitors.AnnotationVisitor
 import pw.binom.wit.visitors.ConstructorVisitor
 import pw.binom.wit.visitors.FuncVisitor
 import pw.binom.wit.visitors.ResourceVisitor
@@ -19,6 +20,8 @@ class ResourceWriter(private val sb: TextWriter) : ResourceVisitor {
             }
         }
     }
+
+    override fun annotation(): AnnotationVisitor = AnnotationWriter(sb)
 
     override fun func(name: String): FuncVisitor {
         sb.append(name).append(": func")

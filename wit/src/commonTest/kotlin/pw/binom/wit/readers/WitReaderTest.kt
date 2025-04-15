@@ -3,6 +3,7 @@ package pw.binom.wit.readers
 import pw.binom.io.file.File
 import pw.binom.io.file.readText
 import pw.binom.wit.parser.BasicTokenizerTest
+import pw.binom.wit.parser.BufferedTokenizer
 import pw.binom.wit.writers.PrettyTextWriter
 import pw.binom.wit.writers.WitWriter
 import kotlin.js.JsFileName
@@ -56,7 +57,7 @@ class WitReaderTest {
         val sb = StringBuilder()
         val w = PrettyTextWriter(sb)
         try {
-            WitReader.parse(BasicTokenizerTest.StringTokenizer(text), WitWriter(w))
+            WitReader.parse(BufferedTokenizer(size = 100, BasicTokenizerTest.StringTokenizer(text)), WitWriter(w))
         } finally {
             println(sb.toString())
         }

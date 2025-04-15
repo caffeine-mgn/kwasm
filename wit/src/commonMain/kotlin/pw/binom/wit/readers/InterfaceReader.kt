@@ -2,13 +2,15 @@ package pw.binom.wit.readers
 
 import pw.binom.wit.parser.TokenType
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.BufferedTokenizer
+import pw.binom.wit.parser.Tokenizer
 import pw.binom.wit.visitors.FuncVisitor
 import pw.binom.wit.visitors.InterfaceVisitor
 import pw.binom.wit.visitors.TypeAliasVisitor
 import pw.binom.wit.visitors.UseVisitor
 
 object InterfaceReader {
-    fun read(tokenizer: BasicTokenizer, visitor: InterfaceVisitor) {
+    fun read(tokenizer: BufferedTokenizer, visitor: InterfaceVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.WORD)
         visitor.start(tokenizer.text)
@@ -38,7 +40,7 @@ object InterfaceReader {
         visitor.end()
     }
 
-    private fun readFunc(tokenizer: BasicTokenizer, visitor: FuncVisitor) {
+    private fun readFunc(tokenizer: BufferedTokenizer, visitor: FuncVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.COLON)
         tokenizer.nextNotSpaceOrEof()
@@ -47,13 +49,13 @@ object InterfaceReader {
         FuncReader.read(tokenizer, visitor)
     }
 
-    private fun readUse(tokenizer: BasicTokenizer, visitor: UseVisitor) {
+    private fun readUse(tokenizer: Tokenizer, visitor: UseVisitor) {
         UseReader.read(tokenizer, visitor)
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.TERMINATOR)
     }
 
-    private fun readTypeAlias(tokenizer: BasicTokenizer, visitor: TypeAliasVisitor) {
+    private fun readTypeAlias(tokenizer: BufferedTokenizer, visitor: TypeAliasVisitor) {
         TypeAliasReader.read(tokenizer, visitor)
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.TERMINATOR)

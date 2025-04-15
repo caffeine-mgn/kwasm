@@ -1,24 +1,31 @@
 package pw.binom.wit.parser
 
-import pw.binom.wit.utils.CircularCounter
+import pw.binom.collections.LinkedList
 
 class BufferedTokenizer(val size: Int, val source: Tokenizer) : Tokenizer {
 
-    private val counter = CircularCounter(capacity = size)
-    private val tokens = arrayOfNulls<Token>(size)
-    private var cursor = counter.headCursor
+    private val list = LinkedList<Token>()
 
-    private fun currentToken() {
-
+    init {
+        putToken()
     }
 
+    private var current: LinkedList.Node<Token>? = list.lastNode
+
+    private fun currentToken() = current?.value
+
     private fun putToken() {
-        tokens[counter.push()] = Token(
-            type = source.type,
-            text = source.text,
-            start = source.start,
-            end = source.end,
+        list.addLast(
+            Token(
+                type = source.type,
+                text = source.text,
+                start = source.start,
+                end = source.end,
+            )
         )
+        if (list.size > size) {
+            list.removeFirstOrNull()
+        }
     }
 
     private data class Token(
@@ -28,37 +35,40 @@ class BufferedTokenizer(val size: Int, val source: Tokenizer) : Tokenizer {
         val end: Int,
     )
 
-    private var backToken: Token? = null
-    private var nextToken: Token? = null
-
     override val type: TokenType
-        get() = nextToken?.type ?: source.type
+        get() = currentToken()?.type ?: source.type
     override val text: String
-        get() = nextToken?.text ?: source.text
+        get() = currentToken()?.text ?: source.text
     override val start: Int
-        get() = nextToken?.start ?: source.start
+        get() = currentToken()?.start ?: source.start
     override val end: Int
-        get() = nextToken?.end ?: source.end
+        get() = currentToken()?.end ?: source.end
+
+    private var eof = false
 
     override fun next(): Boolean {
-        if (backToken != null) {
-            nextToken = backToken
-            backToken = null
+        if (eof) {
+            return false
+        }
+        val next = current?.next
+        if (next != null) {
+            current = next
             return true
         }
-        if (nextToken != null) {
-            nextToken = null
+        if (!source.next()) {
+            eof = true
+            return false
         }
-        return source.next()
+        putToken()
+        current = list.lastNode
+        return true
     }
 
     fun pushBackCurrentToken() {
-        check(backToken == null) { "Can't push back current token" }
-        backToken = Token(
-            type = source.type,
-            text = source.text,
-            start = source.start,
-            end = source.end,
-        )
+        val current = current
+        check(current != null)
+        val prev = current.prev
+        check(prev != null)
+        this.current = prev
     }
 }

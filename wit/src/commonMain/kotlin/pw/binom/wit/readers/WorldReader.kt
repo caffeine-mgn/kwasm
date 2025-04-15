@@ -1,11 +1,13 @@
 package pw.binom.wit.readers
 
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.BufferedTokenizer
 import pw.binom.wit.parser.TokenType
+import pw.binom.wit.parser.Tokenizer
 import pw.binom.wit.visitors.WorldVisitor
 
 object WorldReader {
-    fun read(tokenizer: BasicTokenizer, visitor: WorldVisitor) {
+    fun read(tokenizer: BufferedTokenizer, visitor: WorldVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.WORD)
         visitor.start(tokenizer.text)
@@ -31,7 +33,7 @@ object WorldReader {
         visitor.end()
     }
 
-    private fun parseInclude(tokenizer: BasicTokenizer, visitor: WorldVisitor) {
+    private fun parseInclude(tokenizer: Tokenizer, visitor: WorldVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.WORD)
         visitor.include(tokenizer.text)

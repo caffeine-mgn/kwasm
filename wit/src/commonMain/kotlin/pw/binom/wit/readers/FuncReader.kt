@@ -6,7 +6,7 @@ import pw.binom.wit.parser.BufferedTokenizer
 import pw.binom.wit.visitors.FuncVisitor
 
 object FuncReader {
-    fun read(tokenizer: BasicTokenizer, visitor: FuncVisitor) {
+    fun read(tokenizer: BufferedTokenizer, visitor: FuncVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.OPEN_PAREN)
         visitor.start()
@@ -46,9 +46,8 @@ object FuncReader {
                 when (tokenizer.type) {
                     TokenType.OPEN_PAREN -> MultipleReturnReader.read(tokenizer, visitor.resultMultiple())
                     TokenType.WORD -> {
-                        val t = BufferedTokenizer(tokenizer)
-                        t.pushBackCurrentToken()
-                        TypeReader.read(tokenizer = t, visitor.result())
+                        tokenizer.pushBackCurrentToken()
+                        TypeReader.read(tokenizer = tokenizer, visitor.result())
                     }
 
                     else -> TODO()

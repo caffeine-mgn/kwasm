@@ -1,5 +1,6 @@
 package pw.binom.wit.writers
 
+import pw.binom.wit.visitors.BorrowVisitor
 import pw.binom.wit.visitors.ListVisitor
 import pw.binom.wit.visitors.ResultVisitor
 import pw.binom.wit.visitors.TypeVisitor
@@ -9,6 +10,7 @@ class TypeWriter(private val sb: TextWriter) : TypeVisitor {
     private val result by lazy { ResultWriter(sb) }
     private val tuple by lazy { TupleWriter(sb) }
     private val option by lazy { OptionWriter(sb) }
+    private val borrow by lazy { BorrowWriter(sb) }
 
     override fun u8() {
         sb.append("u8")
@@ -62,12 +64,17 @@ class TypeWriter(private val sb: TextWriter) : TypeVisitor {
         sb.append("char")
     }
 
+    override fun something() {
+        sb.append("_")
+    }
+
     override fun id(value: String) {
         sb.append(value)
     }
 
     override fun result(): ResultVisitor = result
     override fun list(): ListVisitor = list
+    override fun borrow(): BorrowVisitor = borrow
     override fun tuple(): TupleWriter = tuple
     override fun option(): OptionWriter = option
 }

@@ -34,7 +34,11 @@ class ResultWriter(protected val sb: TextWriter) : ResultVisitor {
     }
 
     override fun end() {
-        check(status == STATUS_SECOND)
+        if (status == STATUS_STARTED) {
+            status = STATUS_NONE
+            return
+        }
+        check(status == STATUS_FIRST || status == STATUS_SECOND)
         sb.append(">")
         status = STATUS_NONE
     }

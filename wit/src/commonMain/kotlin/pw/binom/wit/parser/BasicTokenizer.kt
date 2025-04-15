@@ -82,6 +82,12 @@ abstract class BasicTokenizer : Tokenizer {
                 internalText = "%"
                 internalType = TokenType.OPERATOR
             }
+            char == '_' -> {
+                internalStart = position
+                internalEnd = position
+                internalText = "_"
+                internalType = TokenType.UNDERSCORE
+            }
 
             char == '<' -> {
                 internalStart = position

@@ -2,11 +2,10 @@ package pw.binom.wit.readers
 
 import pw.binom.wit.parser.BufferedTokenizer
 import pw.binom.wit.parser.TokenType
-import pw.binom.wit.parser.Tokenizer
-import pw.binom.wit.visitors.ListVisitor
+import pw.binom.wit.visitors.BorrowVisitor
 
-object ListReader {
-    fun read(tokenizer: BufferedTokenizer, visitor: ListVisitor) {
+object BorrowReader {
+    fun read(tokenizer: BufferedTokenizer, visitor: BorrowVisitor) {
         visitor.start()
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.LESS)

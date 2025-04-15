@@ -2,10 +2,12 @@ package pw.binom.wit.readers
 
 import pw.binom.wit.parser.TokenType
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.BufferedTokenizer
+import pw.binom.wit.parser.Tokenizer
 import pw.binom.wit.visitors.WitVisitor
 
 object WitReader {
-    fun parse(tokenizer: BasicTokenizer, fileRootVisitor: WitVisitor) {
+    fun parse(tokenizer: BufferedTokenizer, fileRootVisitor: WitVisitor) {
         fileRootVisitor.start()
         while (true) {
             val hasNext = tokenizer.nextNotSpace()

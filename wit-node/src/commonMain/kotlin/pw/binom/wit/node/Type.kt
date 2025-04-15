@@ -61,6 +61,10 @@ sealed interface Type {
             result(Primitive.CHAR)
         }
 
+        override fun something() {
+            result(Something)
+        }
+
         override fun id(value: String) {
             result(Id(value))
         }
@@ -73,12 +77,24 @@ sealed interface Type {
 
         override fun option(): OptionVisitor = Option(Primitive.U8)
 
+        override fun borrow(): BorrowVisitor = Borrow(Primitive.U8)
     }
 
     fun accept(visitor: TypeVisitor)
     data class List(var element: Type) : Type, ListVisitor {
         override fun accept(visitor: TypeVisitor) {
             val v = visitor.list()
+            v.start()
+            element.accept(v.type())
+            v.end()
+        }
+
+        override fun type(): TypeVisitor = Visitor { element = it }
+    }
+
+    data class Borrow(var element: Type) : Type, BorrowVisitor {
+        override fun accept(visitor: TypeVisitor) {
+            val v = visitor.borrow()
             v.start()
             element.accept(v.type())
             v.end()
@@ -98,12 +114,17 @@ sealed interface Type {
         override fun type(): TypeVisitor = Visitor { element = it }
     }
 
-    data class Result(@JsName("first2") var first: Type, @JsName("second2") var second: Type) : Type, ResultVisitor {
+    data class Result(@JsName("first2") var first: Type?, @JsName("second2") var second: Type?) : Type, ResultVisitor {
+        override fun start() {
+            first = null
+            second = null
+        }
+
         override fun accept(visitor: TypeVisitor) {
             val v = visitor.result()
             v.start()
-            first.accept(v.first())
-            second.accept(v.second())
+            first?.accept(v.first())
+            second?.accept(v.second())
             v.end()
         }
 
@@ -117,14 +138,18 @@ sealed interface Type {
         @JsName("second2")
         var second: Type,
         @JsName("third2")
-        var third: Type,
+        var third: Type?,
     ) : Type, TupleVisitor {
+        override fun start() {
+            third = null
+        }
+
         override fun accept(visitor: TypeVisitor) {
             val v = visitor.tuple()
             v.start()
             first.accept(v.first())
             second.accept(v.second())
-            third.accept(v.third())
+            third?.accept(v.third())
             v.end()
         }
 
@@ -137,6 +162,13 @@ sealed interface Type {
         override fun accept(visitor: TypeVisitor) {
             visitor.id(name)
         }
+    }
+
+    data object Something : Type {
+        override fun accept(visitor: TypeVisitor) {
+            visitor.something()
+        }
+
     }
 
     sealed interface Primitive : Type {

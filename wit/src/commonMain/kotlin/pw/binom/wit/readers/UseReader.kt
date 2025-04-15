@@ -2,10 +2,11 @@ package pw.binom.wit.readers
 
 import pw.binom.wit.parser.TokenType
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.Tokenizer
 import pw.binom.wit.visitors.UseVisitor
 
 object UseReader {
-    fun read(tokenizer: BasicTokenizer, visitor: UseVisitor) {
+    fun read(tokenizer: Tokenizer, visitor: UseVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.WORD)
         val name = tokenizer.text
@@ -91,6 +92,7 @@ object UseReader {
                         }
                     }
 
+                    TokenType.CLOSE_BRACE -> break
                     else -> TODO()
                 }
                 tokenizer.assertType(TokenType.CLOSE_BRACE)

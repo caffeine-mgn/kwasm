@@ -2,11 +2,12 @@ package pw.binom.wit.readers
 
 import pw.binom.wit.parser.TokenType
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.BufferedTokenizer
 import pw.binom.wit.visitors.RecordVisitor
 import pw.binom.wit.visitors.TypeVisitor
 
 object RecordVisitor {
-    fun read(tokenizer: BasicTokenizer, visitor: RecordVisitor) {
+    fun read(tokenizer: BufferedTokenizer, visitor: RecordVisitor) {
         tokenizer.nextNotSpaceOrEof()
         visitor.start(tokenizer.text)
         tokenizer.nextNotSpaceOrEof()
@@ -23,7 +24,7 @@ object RecordVisitor {
         visitor.end()
     }
 
-    private fun readType(tokenizer: BasicTokenizer, visitor: TypeVisitor) {
+    private fun readType(tokenizer: BufferedTokenizer, visitor: TypeVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.COLON)
         TypeReader.read(tokenizer, visitor)

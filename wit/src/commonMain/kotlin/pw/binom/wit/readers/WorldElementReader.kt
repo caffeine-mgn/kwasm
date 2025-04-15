@@ -1,12 +1,14 @@
 package pw.binom.wit.readers
 
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.BufferedTokenizer
 import pw.binom.wit.parser.TokenType
+import pw.binom.wit.parser.Tokenizer
 import pw.binom.wit.visitors.WorldElementVisitor
 import pw.binom.wit.visitors.WorldVisitor
 
 object WorldElementReader {
-    fun read(tokenizer: BasicTokenizer, visitor: WorldElementVisitor) {
+    fun read(tokenizer: BufferedTokenizer, visitor: WorldElementVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.WORD)
         val name = tokenizer.text
@@ -26,7 +28,7 @@ object WorldElementReader {
         }
     }
 
-    private fun readInterface(tokenizer: BasicTokenizer, moduleName: String, visitor: WorldElementVisitor) {
+    private fun readInterface(tokenizer: Tokenizer, moduleName: String, visitor: WorldElementVisitor) {
         tokenizer.assertType(TokenType.WORD)
         val fieldName = tokenizer.text
         tokenizer.nextNotSpaceOrEof()

@@ -1,7 +1,11 @@
 package pw.binom.wit.visitors
 
 interface AnnotationVisitor {
-    fun start(name: String)
-    fun field(name: String, value: String)
-    fun end()
+    companion object {
+        val EMPTY = object : AnnotationVisitor {}
+    }
+
+    fun start(name: String) {}
+    fun field(name: String, value: String) {}
+    fun end() {}
 }

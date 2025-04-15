@@ -2,10 +2,12 @@ package pw.binom.wit.readers
 
 import pw.binom.wit.parser.TokenType
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.BufferedTokenizer
+import pw.binom.wit.parser.Tokenizer
 import pw.binom.wit.visitors.ResourceVisitor
 
 object ResourceReader {
-    fun read(tokenizer: BasicTokenizer, visitor: ResourceVisitor) {
+    fun read(tokenizer: BufferedTokenizer, visitor: ResourceVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.WORD)
         visitor.start(tokenizer.text)
@@ -21,6 +23,13 @@ object ResourceReader {
                         else -> readFunc(tokenizer, visitor)
                     }
                 }
+                TokenType.OPERATOR->{
+                    tokenizer.nextNotSpaceOrEof()
+                    readFunc(tokenizer, visitor)
+                }
+
+                TokenType.LINE_COMMENT -> visitor.lineComment(tokenizer.text.substring(2))
+                TokenType.AT -> AnnotationReader.read(tokenizer, visitor.annotation())
 
                 else -> TODO()
             }
@@ -28,7 +37,7 @@ object ResourceReader {
         visitor.end()
     }
 
-    private fun readFunc(tokenizer: BasicTokenizer, visitor: ResourceVisitor) {
+    private fun readFunc(tokenizer: BufferedTokenizer, visitor: ResourceVisitor) {
         val name = tokenizer.text
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.COLON)
@@ -40,7 +49,7 @@ object ResourceReader {
                 tokenizer.nextNotSpaceOrEof()
                 tokenizer.assertType(TokenType.WORD)
                 check(tokenizer.text == "func")
-                FuncReader.read(tokenizer, visitor.func(name))
+                FuncReader.read(tokenizer, visitor.funcStatic(name))
             }
 
             else -> TODO()

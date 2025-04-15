@@ -41,7 +41,7 @@ class TupleWriter(private val sb: TextWriter) : TupleVisitor {
     }
 
     override fun end() {
-        check(status == STATUS_THIRD)
+        check(status == STATUS_SECOND || status == STATUS_THIRD)
         status = STATUS_NONE
         sb.append(">")
     }

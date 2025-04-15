@@ -18,9 +18,12 @@ interface TypeVisitor {
     fun string() {}
     fun bool() {}
     fun char() {}
+    fun something() {}
     fun id(value: String) {}
     fun result(): ResultVisitor = ResultVisitor.EMPTY
     fun list(): ListVisitor = ListVisitor.EMPTY
+    fun borrow(): BorrowVisitor = BorrowVisitor.EMPTY
     fun tuple(): TupleVisitor = TupleVisitor.EMPTY
     fun option(): OptionVisitor = OptionVisitor.EMPTY
+    fun end() {}
 }
