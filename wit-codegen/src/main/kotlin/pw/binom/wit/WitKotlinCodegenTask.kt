@@ -5,6 +5,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import pw.binom.wit.node.WitNode
 import pw.binom.wit.parser.BasicTokenizer
+import pw.binom.wit.parser.BufferedTokenizer
 import pw.binom.wit.readers.WitReader
 import java.io.Closeable
 import java.io.Reader
@@ -31,7 +32,7 @@ abstract class WitKotlinCodegenTask : DefaultTask() {
             val wit = WitNode(null, emptyList())
             it.inputStream().bufferedReader().use {
                 InputTokenizer(it).use { tokenizer ->
-                    WitReader.parse(tokenizer = tokenizer, fileRootVisitor = wit)
+                    WitReader.parse(tokenizer = BufferedTokenizer(100, tokenizer), fileRootVisitor = wit)
                 }
             }
             wit
