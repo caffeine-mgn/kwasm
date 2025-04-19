@@ -3,7 +3,11 @@ package pw.binom.wit.node
 import pw.binom.wit.visitors.InterfaceVisitor
 import pw.binom.wit.visitors.UseVisitor
 
-data class UseNode(var name: Id, var types: List<Pair<String, String?>>) : UseVisitor, InterfaceElement {
+data class UseNode(
+    var name: Id,
+    var types: List<Pair<String, String?>>,
+    var annotations: List<AnnotationNode>,
+) : UseVisitor, InterfaceElement {
     sealed interface Id {
         fun accept(visitor: UseVisitor)
         data class Internal(val name: String) : Id {
@@ -43,6 +47,9 @@ data class UseNode(var name: Id, var types: List<Pair<String, String?>>) : UseVi
     }
 
     override fun accept(visitor: InterfaceVisitor) {
+        annotations.forEach {
+            it.accept(visitor.annotation())
+        }
         accept(visitor.use())
     }
 

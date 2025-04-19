@@ -6,7 +6,7 @@ import pw.binom.wit.visitors.MultipleReturnVisitor
 import pw.binom.wit.visitors.TypeVisitor
 import kotlin.js.JsName
 
-class FuncNode(
+data class FuncNode(
     var name: String,
     var args: List<Pair<String, Type>>,
     @JsName("result2")

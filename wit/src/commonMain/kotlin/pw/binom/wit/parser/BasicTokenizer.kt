@@ -173,7 +173,7 @@ abstract class BasicTokenizer : Tokenizer {
                 internalType = TokenType.TERMINATOR
             }
 
-            else -> TODO("Unsupported char \"$char\"")
+            else -> TODO("Unsupported char \"$char\" (0x${char.code.toUInt().toString(16)} ${char.code==0xffff})")
         }
         return true
     }

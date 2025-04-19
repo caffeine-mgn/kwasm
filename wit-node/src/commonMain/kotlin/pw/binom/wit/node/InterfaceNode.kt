@@ -2,13 +2,20 @@ package pw.binom.wit.node
 
 import pw.binom.wit.visitors.*
 
-class InterfaceNode(var name: String, var elements: List<InterfaceElement>) : WitElement, InterfaceVisitor {
-    private var argsList: ArrayList<InterfaceElement>? = null
-    private val annotations = ArrayList<AnnotationNode>()
+data class InterfaceNode(
+    var name: String,
+    var elements: List<InterfaceElement>,
+    var annotations: List<AnnotationNode>,
+) : WitElement, InterfaceVisitor {
+    private var tmpElements: ArrayList<InterfaceElement>? = null
+    private var tmpAnnotations: ArrayList<AnnotationNode>? = null
     fun accept(visitor: InterfaceVisitor) {
         visitor.start(name)
         elements.forEach {
             it.accept(visitor)
+        }
+        annotations.forEach {
+            it.accept(visitor.annotation())
         }
         visitor.end()
     }
@@ -19,57 +26,75 @@ class InterfaceNode(var name: String, var elements: List<InterfaceElement>) : Wi
 
     override fun start(name: String) {
         this.name = name
-        argsList = ArrayList()
+        tmpElements = ArrayList()
+        tmpAnnotations = ArrayList()
     }
 
     override fun typeAlias(): TypeAliasVisitor {
         val f = TypeAliasNode("", Type.Primitive.S8)
-        argsList!! += f
+        tmpElements!! += f
         return f
     }
 
     override fun annotation(): AnnotationVisitor {
         val r = AnnotationNode("", emptyList())
-        annotations += r
+        tmpAnnotations!! += r
         return r
     }
 
     override fun record(): RecordVisitor {
-        val r = RecordNode("", emptyList())
-        argsList!! += r
+        val r = RecordNode("", emptyList(), tmpAnnotations!!)
+        tmpAnnotations = ArrayList()
+        tmpElements!! += r
+        return r
+    }
+
+    override fun flags(): FlagsVisitor {
+        val r = FlagsNode("", emptyList(), tmpAnnotations!!)
+        tmpAnnotations = ArrayList()
+        tmpElements!! += r
         return r
     }
 
     override fun use(): UseVisitor {
-        val r = UseNode("", emptyList())
-        argsList!! += r
+        val r = UseNode(UseNode.Id.Internal(""), emptyList(), tmpAnnotations!!)
+        tmpAnnotations = ArrayList()
+        tmpElements!! += r
         return r
     }
 
     override fun enum(): EnumVisitor {
-        val r = EnumNode("", emptyList())
-        argsList!! += r
+        val r = EnumNode("", emptyList(), tmpAnnotations!!)
+        tmpAnnotations = ArrayList()
+        tmpElements!! += r
         return r
     }
 
     override fun resource(): ResourceVisitor {
-        val r = ResourceNode("", emptyList())
-        argsList!! += r
+        val r = ResourceNode("", emptyList(), tmpAnnotations!!)
+        tmpAnnotations = ArrayList()
+        tmpElements!! += r
         return r
     }
 
     override fun variant(): VariantVisitor {
-        TODO("Not yet implemented")
+        val r = VariantNode("", emptyList(), tmpAnnotations!!)
+        tmpAnnotations = ArrayList()
+        tmpElements!! += r
+        return r
     }
 
     override fun func(name: String): FuncVisitor {
-        val f = FuncNode(name, emptyList(), FunctionResult.VoidResult)
-        argsList!! += f
+        val f = FuncNode(name, emptyList(), FunctionResult.VoidResult/*, tmpAnnotations!!*/)
+        tmpAnnotations = ArrayList()
+        tmpElements!! += f
         return f
     }
 
     override fun end() {
-        elements = argsList!!
-        argsList = null
+        annotations = tmpAnnotations!!
+        tmpAnnotations = null
+        elements = tmpElements!!
+        tmpElements = null
     }
 }

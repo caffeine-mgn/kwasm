@@ -1,0 +1,8 @@
+package binom:pipeline2;
+
+interface fff {
+    aaa: func();
+}
+world test2 {
+    import fff;
+}

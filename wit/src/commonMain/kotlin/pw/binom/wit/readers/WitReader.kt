@@ -20,6 +20,7 @@ object WitReader {
                     "package" -> PackageReader.read(tokenizer, fileRootVisitor.witPackage())
                     "interface" -> InterfaceReader.read(tokenizer, fileRootVisitor.witInterface())
                     "world" -> WorldReader.read(tokenizer, fileRootVisitor.world())
+//                    "use" -> UseReader.read(tokenizer, fileRootVisitor.use())
                     else -> TODO("Token ${tokenizer.type}: ${tokenizer.text}")
                 }
 

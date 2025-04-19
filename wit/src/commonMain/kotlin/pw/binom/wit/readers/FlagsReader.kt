@@ -1,12 +1,11 @@
 package pw.binom.wit.readers
 
 import pw.binom.wit.parser.TokenType
-import pw.binom.wit.parser.BasicTokenizer
 import pw.binom.wit.parser.Tokenizer
-import pw.binom.wit.visitors.EnumVisitor
+import pw.binom.wit.visitors.FlagsVisitor
 
-object EnumReader {
-    fun read(tokenizer: Tokenizer, visitor: EnumVisitor) {
+object FlagsReader {
+    fun read(tokenizer: Tokenizer, visitor: FlagsVisitor) {
         tokenizer.nextNotSpaceOrEof()
         visitor.start(tokenizer.text)
         tokenizer.nextNotSpaceOrEof()

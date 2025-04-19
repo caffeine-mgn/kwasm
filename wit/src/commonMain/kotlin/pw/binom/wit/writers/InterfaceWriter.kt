@@ -16,6 +16,7 @@ class InterfaceWriter(private val sb: TextWriter) : InterfaceVisitor {
         sb.append("interface ").append(name).append(" {").appendLine().levelInc()
     }
 
+    override fun flags(): FlagsVisitor = FlagsWriter(sb)
     override fun typeAlias(): TypeAliasVisitor {
         check(status == NAME || status == ELEMENTS)
         status = ELEMENTS

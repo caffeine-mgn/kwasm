@@ -38,7 +38,7 @@ object WorldElementReader {
         tokenizer.nextNotSpaceOrEof()
         when (tokenizer.type) {
             TokenType.AT -> {
-                val sb = StringBuilder(tokenizer.text)
+                val sb = StringBuilder()
                 sb.append(tokenizer.readUntil { it.type != TokenType.TERMINATOR })
                 visitor.externalInterface(
                     packageModule = moduleName,

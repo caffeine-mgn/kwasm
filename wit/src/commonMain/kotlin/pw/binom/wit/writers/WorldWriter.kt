@@ -25,6 +25,16 @@ class WorldWriter(private val sb: TextWriter) : WorldVisitor {
         sb.append("include ").append(worldName).append(";").appendLine()
     }
 
+    override fun include(packageName: String, packageField: String, interfaceName: String) {
+        sb.append("include ").append(packageName).append(":").append(packageField).append("/").append(interfaceName)
+            .append(";").appendLine()
+    }
+
+    override fun include(packageName: String, packageField: String, interfaceName: String, version: String) {
+        sb.append("include ").append(packageName).append(":").append(packageField).append("/").append(interfaceName)
+            .append("@").append(version).append(";").appendLine()
+    }
+
     private fun build(): WorldElementVisitor {
         val visitor = WorldElementWriter(sb)
         return object : WorldElementVisitor {

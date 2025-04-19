@@ -1,6 +1,6 @@
 package pw.binom.wit.visitors
 
-interface FuncVisitor {
+interface FuncVisitor : BaseVisitor {
     fun start()
     fun arg(name: String): TypeVisitor
     fun result(): TypeVisitor

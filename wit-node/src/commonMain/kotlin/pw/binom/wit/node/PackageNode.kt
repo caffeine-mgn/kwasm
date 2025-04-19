@@ -32,4 +32,13 @@ data class PackageNode(var module: String, var field: String, var version: Strin
 
     override fun end() {
     }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append(module).append(":").append(field)
+        if (version != null) {
+            sb.append("@").append(version)
+        }
+        return sb.toString()
+    }
 }

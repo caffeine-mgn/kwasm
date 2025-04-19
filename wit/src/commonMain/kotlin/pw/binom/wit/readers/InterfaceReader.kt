@@ -27,6 +27,7 @@ object InterfaceReader {
                     "enum" -> EnumReader.read(tokenizer, visitor.enum())
                     "resource" -> ResourceReader.read(tokenizer, visitor.resource())
                     "variant" -> VariantReader.read(tokenizer, visitor.variant())
+                    "flags" -> FlagsReader.read(tokenizer, visitor.flags())
                     else -> readFunc(tokenizer, visitor.func(tokenizer.text))
 //                    else -> TODO("type=${tokenizer.type} text=${tokenizer.text} start=${tokenizer.start}")
                 }

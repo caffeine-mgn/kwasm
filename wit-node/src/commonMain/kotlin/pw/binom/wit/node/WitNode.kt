@@ -2,15 +2,22 @@ package pw.binom.wit.node
 
 import pw.binom.wit.visitors.*
 
-class WitNode(var packageNode: PackageNode?, var items: List<WitElement>) : WitVisitor {
-    private var argsList: ArrayList<WitElement>? = null
+data class WitNode(var packageNode: PackageNode?, var items: List<WitElement>) : WitVisitor {
+    private var tmpElements: ArrayList<WitElement>? = null
+    private var tmpAnnotations: ArrayList<AnnotationNode>? = null
+
+    val worlds
+        get() = items.asSequence().filterIsInstance<WorldNode>()
+
     override fun start() {
-        argsList = ArrayList()
+        tmpElements = ArrayList()
+        tmpAnnotations = ArrayList()
     }
 
     override fun end() {
-        items = argsList!!
-        argsList = null
+        items = tmpElements!!
+        tmpElements = null
+        tmpAnnotations = null
     }
 
     fun accept(visitor: WitVisitor) {
@@ -24,21 +31,23 @@ class WitNode(var packageNode: PackageNode?, var items: List<WitElement>) : WitV
         return p
     }
 
-    private val annotations = ArrayList<AnnotationNode>()
-
     override fun annotation(): AnnotationVisitor {
         val r = AnnotationNode("", emptyList())
-        annotations += r
+        tmpAnnotations!! += r
         return r
     }
 
     override fun witInterface(): InterfaceVisitor {
-        val e = InterfaceNode("", emptyList())
-        argsList!! += e
+        val e = InterfaceNode("", emptyList(), tmpAnnotations!!)
+        tmpAnnotations = ArrayList()
+        tmpElements!! += e
         return e
     }
 
     override fun world(): WorldVisitor {
-        TODO("Not yet implemented")
+        val e = WorldNode("", emptyList(), tmpAnnotations!!)
+        tmpAnnotations = ArrayList()
+        tmpElements!! += e
+        return e
     }
 }

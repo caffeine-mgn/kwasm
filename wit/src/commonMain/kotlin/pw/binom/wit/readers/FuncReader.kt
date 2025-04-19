@@ -14,6 +14,7 @@ object FuncReader {
         while (true) {
             tokenizer.nextNotSpaceOrEof()
             when (tokenizer.type) {
+                TokenType.OPERATOR -> continue
                 TokenType.WORD -> {
                     val argName = tokenizer.text
                     tokenizer.nextNotSpaceOrEof()
@@ -28,9 +29,13 @@ object FuncReader {
                 }
 
                 TokenType.CLOSE_PAREN -> break
+                TokenType.LINE_COMMENT -> {
+                    visitor.lineComment(tokenizer.text.substring(2))
+                    continue
+                }
+
                 else -> TODO()
             }
-
             TODO()
         }
         tokenizer.nextNotSpaceOrEof()

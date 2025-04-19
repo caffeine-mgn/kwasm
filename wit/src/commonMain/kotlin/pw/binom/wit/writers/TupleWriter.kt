@@ -7,9 +7,7 @@ class TupleWriter(private val sb: TextWriter) : TupleVisitor {
     companion object {
         private const val STATUS_NONE = 0
         private const val STATUS_STARTED = 1
-        private const val STATUS_FIRST = 2
-        private const val STATUS_SECOND = 3
-        private const val STATUS_THIRD = 4
+        private const val STATUS_ELEMENTS = 2
     }
 
     private var status = STATUS_NONE
@@ -20,28 +18,19 @@ class TupleWriter(private val sb: TextWriter) : TupleVisitor {
         sb.append("tuple")
     }
 
-    override fun first(): TypeVisitor {
-        check(status == STATUS_STARTED)
-        status = STATUS_FIRST
-        sb.append("<")
-        return TypeWriter(sb)
-    }
-
-    override fun second(): TypeVisitor {
-        check(status == STATUS_FIRST)
-        status = STATUS_SECOND
-        sb.append(",")
-        return TypeWriter(sb)
-    }
-
-    override fun third(): TypeVisitor {
-        check(status == STATUS_SECOND)
-        status = STATUS_THIRD
+    override fun element(): TypeVisitor {
+        if (status == STATUS_STARTED) {
+            sb.append("<")
+            status = STATUS_ELEMENTS
+            return TypeWriter(sb)
+        }
+        check(status == STATUS_ELEMENTS)
+        sb.append(", ")
         return TypeWriter(sb)
     }
 
     override fun end() {
-        check(status == STATUS_SECOND || status == STATUS_THIRD)
+        check(status == STATUS_ELEMENTS)
         status = STATUS_NONE
         sb.append(">")
     }

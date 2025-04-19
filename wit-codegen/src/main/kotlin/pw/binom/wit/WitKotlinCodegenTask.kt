@@ -6,6 +6,7 @@ import org.gradle.api.tasks.TaskAction
 import pw.binom.wit.node.WitNode
 import pw.binom.wit.parser.BasicTokenizer
 import pw.binom.wit.parser.BufferedTokenizer
+import pw.binom.wit.parser.Tokenizer
 import pw.binom.wit.readers.WitReader
 import java.io.Closeable
 import java.io.Reader
@@ -15,13 +16,18 @@ abstract class WitKotlinCodegenTask : DefaultTask() {
     @get:Input
     val params = project.extensions.getByType(WitExtension::class.java)
 
-    private class InputTokenizer(val data: Reader) : BasicTokenizer(), Closeable {
-        override fun nextChar(): Char = data.read().toChar()
+    class InputTokenizer(val data: Reader) : BasicTokenizer(), Closeable {
+        override fun nextChar(): Char {
+            val code = data.read()
+            if (code == -1) {
+                throw Tokenizer.EOFException()
+            }
+            return code.toChar()
+        }
 
         override fun close() {
             data.close()
         }
-
     }
 
     @TaskAction

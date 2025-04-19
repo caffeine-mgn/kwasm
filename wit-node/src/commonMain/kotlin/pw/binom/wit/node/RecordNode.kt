@@ -4,7 +4,11 @@ import pw.binom.wit.visitors.InterfaceVisitor
 import pw.binom.wit.visitors.RecordVisitor
 import pw.binom.wit.visitors.TypeVisitor
 
-data class RecordNode(var name: String, var fields: List<Pair<String, Type>>) : InterfaceElement, RecordVisitor {
+data class RecordNode(
+    var name: String,
+    var fields: List<Pair<String, Type>>,
+    var annotations: List<AnnotationNode>,
+) : InterfaceElement, RecordVisitor {
 
     private var argsList: ArrayList<Pair<String, Type>>? = null
 
@@ -17,6 +21,9 @@ data class RecordNode(var name: String, var fields: List<Pair<String, Type>>) : 
     }
 
     override fun accept(visitor: InterfaceVisitor) {
+        annotations.forEach {
+            it.accept(visitor.annotation())
+        }
         accept(visitor.record())
     }
 

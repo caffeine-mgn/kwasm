@@ -12,28 +12,39 @@ object ResourceReader {
         tokenizer.assertType(TokenType.WORD)
         visitor.start(tokenizer.text)
         tokenizer.nextNotSpaceOrEof()
-        tokenizer.assertType(TokenType.OPEN_BRACE)
-        while (true) {
-            tokenizer.nextNotSpaceOrEof()
-            when (tokenizer.type) {
-                TokenType.CLOSE_BRACE -> break
-                TokenType.WORD -> {
-                    when (tokenizer.text) {
-                        "constructor" -> ConstructorReader.read(tokenizer, visitor.init())
-                        else -> readFunc(tokenizer, visitor)
+        when (tokenizer.type) {
+            TokenType.TERMINATOR -> {
+                // Do nothing
+            }
+
+            TokenType.OPEN_BRACE -> {
+                while (true) {
+                    tokenizer.nextNotSpaceOrEof()
+                    when (tokenizer.type) {
+                        TokenType.CLOSE_BRACE -> break
+                        TokenType.WORD -> {
+                            when (tokenizer.text) {
+                                "constructor" -> ConstructorReader.read(tokenizer, visitor.init())
+                                else -> readFunc(tokenizer, visitor)
+                            }
+                        }
+
+                        TokenType.OPERATOR -> {
+                            tokenizer.nextNotSpaceOrEof()
+                            readFunc(tokenizer, visitor)
+                        }
+
+                        TokenType.LINE_COMMENT -> visitor.lineComment(tokenizer.text.substring(2))
+                        TokenType.AT -> AnnotationReader.read(tokenizer, visitor.annotation())
+
+                        else -> TODO()
                     }
                 }
-                TokenType.OPERATOR->{
-                    tokenizer.nextNotSpaceOrEof()
-                    readFunc(tokenizer, visitor)
-                }
-
-                TokenType.LINE_COMMENT -> visitor.lineComment(tokenizer.text.substring(2))
-                TokenType.AT -> AnnotationReader.read(tokenizer, visitor.annotation())
-
-                else -> TODO()
             }
+
+            else -> TODO()
         }
+
         visitor.end()
     }
 

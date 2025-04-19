@@ -1,7 +1,7 @@
 package pw.binom.wit.visitors
 
-interface EnumVisitor:BaseVisitor {
-    fun start(value: String)
+interface FlagsVisitor : BaseVisitor {
+    fun start(name: String)
     fun element(value: String)
     fun end()
 }

@@ -3,7 +3,11 @@ package pw.binom.wit.node
 import pw.binom.wit.visitors.EnumVisitor
 import pw.binom.wit.visitors.InterfaceVisitor
 
-class EnumNode(var name: String, var elements: List<String>) : InterfaceElement, EnumVisitor {
+class EnumNode(
+    var name: String,
+    var elements: List<String>,
+    var annotations: List<AnnotationNode>,
+) : InterfaceElement, EnumVisitor {
     private var argsList: ArrayList<String>? = null
 
     fun accept(visitor: EnumVisitor) {
@@ -15,6 +19,9 @@ class EnumNode(var name: String, var elements: List<String>) : InterfaceElement,
     }
 
     override fun accept(visitor: InterfaceVisitor) {
+        annotations.forEach {
+            it.accept(visitor.annotation())
+        }
         accept(visitor.enum())
     }
 

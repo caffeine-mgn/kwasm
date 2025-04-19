@@ -18,6 +18,14 @@ object RecordVisitor {
                 TokenType.CLOSE_BRACE -> break
                 TokenType.COMMA -> continue
                 TokenType.WORD -> readType(tokenizer, visitor.field(tokenizer.text))
+                TokenType.OPERATOR -> {
+                    tokenizer.nextNotSpaceOrEof()
+                    tokenizer.assertType(TokenType.WORD)
+                    readType(tokenizer, visitor.field(tokenizer.text))
+                }
+
+                TokenType.LINE_COMMENT -> visitor.lineComment(tokenizer.text.substring(2))
+
                 else -> TODO()
             }
         }

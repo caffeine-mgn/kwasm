@@ -4,7 +4,10 @@ import pw.binom.wit.parser.BasicTokenizer
 import pw.binom.wit.parser.BufferedTokenizer
 import pw.binom.wit.parser.TokenType
 import pw.binom.wit.parser.Tokenizer
+import pw.binom.wit.utils.TokensRule
+import pw.binom.wit.utils.readVersion
 import pw.binom.wit.visitors.WorldVisitor
+import kotlin.jvm.JvmInline
 
 object WorldReader {
     fun read(tokenizer: BufferedTokenizer, visitor: WorldVisitor) {
@@ -33,11 +36,67 @@ object WorldReader {
         visitor.end()
     }
 
-    private fun parseInclude(tokenizer: Tokenizer, visitor: WorldVisitor) {
+    private val simpleInclude = TokensRule.build {
+        type(TokenType.WORD)
+        type(TokenType.TERMINATOR)
+    }
+
+    private val external = TokensRule.build {
+        type(TokenType.WORD)
+        type(TokenType.COMMA)
+        type(TokenType.WORD)
+        type(TokenType.DIV)
+        type(TokenType.WORD)
+        type(TokenType.TERMINATOR)
+    }
+
+    private fun parseInclude(tokenizer: BufferedTokenizer, visitor: WorldVisitor) {
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.WORD)
-        visitor.include(tokenizer.text)
+        val first = tokenizer.text
         tokenizer.nextNotSpaceOrEof()
-        tokenizer.assertType(TokenType.TERMINATOR)
+        when (tokenizer.type) {
+            TokenType.TERMINATOR -> {
+                visitor.include(first)
+                return
+            }
+
+            TokenType.COLON -> {
+                tokenizer.nextNotSpaceOrEof()
+                tokenizer.assertType(TokenType.WORD)
+                val fieldName = tokenizer.text
+                tokenizer.nextNotSpaceOrEof()
+                tokenizer.assertType(TokenType.DIV)
+                tokenizer.nextNotSpaceOrEof()
+                tokenizer.assertType(TokenType.WORD)
+                val interfaceName = tokenizer.text
+                tokenizer.nextNotSpaceOrEof()
+                when (tokenizer.type) {
+                    TokenType.TERMINATOR -> {
+                        visitor.include(
+                            packageName = first,
+                            packageField = fieldName,
+                            interfaceName = interfaceName
+                        )
+                    }
+
+                    TokenType.AT -> {
+                        val version = tokenizer.readVersion()
+                        visitor.include(
+                            packageName = first,
+                            packageField = fieldName,
+                            interfaceName = interfaceName,
+                            version = version,
+                        )
+                        tokenizer.nextNotSpaceOrEof()
+                        tokenizer.assertType(TokenType.TERMINATOR)
+                    }
+
+                    else -> TODO()
+                }
+            }
+
+            else -> TODO()
+        }
     }
 }

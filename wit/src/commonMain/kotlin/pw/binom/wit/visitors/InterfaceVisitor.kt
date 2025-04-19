@@ -8,6 +8,7 @@ interface InterfaceVisitor:BaseVisitor {
     fun enum(): EnumVisitor
     fun resource(): ResourceVisitor
     fun variant(): VariantVisitor
+    fun flags(): FlagsVisitor
     fun annotation(): AnnotationVisitor
     fun func(name: String): FuncVisitor
     fun end()

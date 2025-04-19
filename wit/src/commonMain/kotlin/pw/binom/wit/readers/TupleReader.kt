@@ -9,23 +9,14 @@ object TupleReader {
         visitor.start()
         tokenizer.nextNotSpaceOrEof()
         tokenizer.assertType(TokenType.LESS)
-        TypeReader.read(tokenizer, visitor.first())
-        tokenizer.nextNotSpaceOrEof()
-        tokenizer.assertType(TokenType.COMMA)
-        TypeReader.read(tokenizer, visitor.second())
-        tokenizer.nextNotSpaceOrEof()
-        when (tokenizer.type) {
-            TokenType.COMMA -> {
-                TypeReader.read(tokenizer, visitor.third())
-                tokenizer.nextNotSpaceOrEof()
-                tokenizer.assertType(TokenType.GREATER)
+        while (true) {
+            TypeReader.read(tokenizer, visitor.element())
+            tokenizer.nextNotSpaceOrEof()
+            when (tokenizer.type) {
+                TokenType.COMMA -> continue
+                TokenType.GREATER -> break
+                else -> TODO()
             }
-
-            TokenType.GREATER -> {
-                // dp nothing
-            }
-
-            else -> TODO()
         }
         visitor.end()
     }

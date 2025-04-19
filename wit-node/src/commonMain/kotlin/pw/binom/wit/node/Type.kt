@@ -73,7 +73,7 @@ sealed interface Type {
 
         override fun list(): ListVisitor = List(Primitive.S8)
 
-        override fun tuple(): TupleVisitor = Tuple(Primitive.S8, Primitive.S8, Primitive.S8)
+        override fun tuple(): TupleVisitor = Tuple(emptyList())
 
         override fun option(): OptionVisitor = Option(Primitive.U8)
 
@@ -133,29 +133,31 @@ sealed interface Type {
     }
 
     data class Tuple(
-        @JsName("first2")
-        var first: Type,
-        @JsName("second2")
-        var second: Type,
-        @JsName("third2")
-        var third: Type?,
+        var elements: kotlin.collections.List<Type>,
     ) : Type, TupleVisitor {
+        private var tmp: ArrayList<Type>? = null
         override fun start() {
-            third = null
+            tmp = ArrayList()
         }
 
         override fun accept(visitor: TypeVisitor) {
             val v = visitor.tuple()
             v.start()
-            first.accept(v.first())
-            second.accept(v.second())
-            third?.accept(v.third())
+            elements.forEach {
+                it.accept(v.element())
+            }
             v.end()
         }
 
-        override fun first(): TypeVisitor = Visitor { first = it }
-        override fun second(): TypeVisitor = Visitor { second = it }
-        override fun third(): TypeVisitor = Visitor { third = it }
+        override fun element(): TypeVisitor = Visitor {
+            tmp!! += it
+        }
+
+        override fun end() {
+            elements = tmp!!
+            tmp = null
+            super.end()
+        }
     }
 
     data class Id(val name: String) : Type {
