@@ -27,16 +27,24 @@ class WitTest {
 //                wit
 //            }.toList()
 
-        val p = WitProject.create(File("/tmp/ff/wasi-http/wit"))
+        val p = ProjectScope.create(File("/tmp/ff/wasi-http/wit"))
+        println(p)
 //        val dd = p.get(PackageNode("wasi", "http", "0.2.5"), "proxy")
-        val exports = HashSet<InterfacePath>()
-        val imports = HashSet<InterfacePath>()
-        p.collectInterfaces(PackageNode("wasi", "http", "0.2.5"), "proxy", HashSet(), exports, imports)
-        println("Exports: $exports")
-        println("Imports: $imports")
+//        val exports = HashSet<InterfacePath>()
+//        val imports = HashSet<InterfacePath>()
+//        p.collectInterfaces(PackageNode("wasi", "http", "0.2.5"), "proxy", HashSet(), exports, imports)
+//        println("Exports: $exports")
+//        println("Imports: $imports")
     }
 }
 
+fun ProjectScope.Companion.create(direction: File): ProjectScope {
+    val main = WitPackage.create(direction)
+    val deps = direction.resolve("deps").listFiles()
+        .filter { it.isDirectory }
+        .map { file -> WitPackage.create(file) }
+    return ProjectScope((listOf(main) + deps).associateBy { it.packageName })
+}
 fun WitProject.Companion.create(direction: File): WitProject {
     val main = WitPackage.create(direction)
     val deps = direction.resolve("deps").listFiles()

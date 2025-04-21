@@ -9,7 +9,7 @@ class WitPackage(
     val packageName: PackageNode,
     val worlds: Map<String, WorldNode>,
     val interfaces: Map<String, InterfaceNode>,
-) : PackageScope {
+) {
     companion object {
         fun create(nodes: Collection<WitNode>): WitPackage {
             var packageExist: PackageNode? = null
@@ -44,14 +44,4 @@ class WitPackage(
             )
         }
     }
-
-    override fun findWorld(name: String) {
-        TODO("Not yet implemented")
-    }
-
-    //    override fun findWorld(name: String) = worlds[name]
-    override fun findInterface(name: String) {
-        TODO("Not yet implemented")
-    }
-
 }

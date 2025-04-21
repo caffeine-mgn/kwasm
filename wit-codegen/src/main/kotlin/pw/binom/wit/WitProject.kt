@@ -59,7 +59,6 @@ class WitProject(val collections: Map<PackageNode, WitPackage>) {
                 }
             }
         }
-        println()
     }
 }
 
