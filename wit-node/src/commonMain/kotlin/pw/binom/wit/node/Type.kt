@@ -4,6 +4,44 @@ import pw.binom.wit.visitors.*
 import kotlin.js.JsName
 
 sealed interface Type {
+    private class ListVisitorVisitor(
+        val subType: List,
+        val result: (Type) -> Unit,
+    ) : ListVisitor by subType {
+        override fun end() {
+            super.end()
+            result(subType)
+        }
+    }
+
+    private class OptionVisitorVisitor(val subType: Option, val result: (Type) -> Unit) : OptionVisitor by subType {
+        override fun end() {
+            super.end()
+            result(subType)
+        }
+    }
+
+    private class BorrowVisitorVisitor(val subType: Borrow, val result: (Type) -> Unit) : BorrowVisitor by subType {
+        override fun end() {
+            super.end()
+            result(subType)
+        }
+    }
+
+    private class TupleVisitorVisitor(val subType: Tuple, val result: (Type) -> Unit) : TupleVisitor by subType {
+        override fun end() {
+            super.end()
+            result(subType)
+        }
+    }
+
+    private class ResultVisitorVisitor(val subType: Result, val result: (Type) -> Unit) : ResultVisitor by subType {
+        override fun end() {
+            super.end()
+            result(subType)
+        }
+    }
+
     class Visitor(
         @JsName("result2")
         val result: (Type) -> Unit,
@@ -69,15 +107,15 @@ sealed interface Type {
             result(Id(value))
         }
 
-        override fun result(): ResultVisitor = Result(Primitive.S8, Primitive.S8)
+        override fun result(): ResultVisitor = ResultVisitorVisitor(Result(Primitive.S8, Primitive.S8), result)
 
-        override fun list(): ListVisitor = List(Primitive.S8)
+        override fun list(): ListVisitor = ListVisitorVisitor(List(Primitive.S8), result)
 
-        override fun tuple(): TupleVisitor = Tuple(emptyList())
+        override fun tuple(): TupleVisitor = TupleVisitorVisitor(Tuple(emptyList()), result)
 
-        override fun option(): OptionVisitor = Option(Primitive.U8)
+        override fun option(): OptionVisitor = OptionVisitorVisitor(Option(Primitive.U8), result)
 
-        override fun borrow(): BorrowVisitor = Borrow(Primitive.U8)
+        override fun borrow(): BorrowVisitor = BorrowVisitorVisitor(Borrow(Primitive.U8), result)
     }
 
     fun accept(visitor: TypeVisitor)

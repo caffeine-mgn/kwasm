@@ -3,9 +3,9 @@ package pw.binom.wit
 import pw.binom.wit.node.*
 
 class InterfaceScope(val node: InterfaceNode, val world: PackageScope) : Scope2 {
-    private val internalTypes = HashMap<String, TType>()
+    private val internalTypes = HashMap<String, TypeRef>()
     private val internalFunctions = HashSet<FuncNode>()
-    val types: Map<String, TType>
+    val types: Map<String, TypeRef>
         get() = internalTypes
 
     init {
@@ -13,15 +13,17 @@ class InterfaceScope(val node: InterfaceNode, val world: PackageScope) : Scope2 
             .asSequence()
             .forEach { el ->
                 when (el) {
-                    is EnumNode -> internalTypes[el.name] = TType.Enum(el.name)
-                    is FlagsNode -> internalTypes[el.name] = TType.Flags(el.name)
+                    is EnumNode -> internalTypes[el.name] = TypeRef.Enum(el.name)
+                    is FlagsNode -> internalTypes[el.name] = TypeRef.Flags(el.name)
                     is FuncNode -> internalFunctions += el
-                    is RecordNode -> internalTypes[el.name] = TType.Record(el.name)
-                    is ResourceNode -> internalTypes[el.name] = TType.Resource(el.name)
-                    is TypeAliasNode -> internalTypes[el.name] = TType.Alias(el.name)
+                    is RecordNode -> {
+                        internalTypes[el.name] = TypeRef.Record(el.name)
+                    }
+                    is ResourceNode -> internalTypes[el.name] = TypeRef.Resource(el.name)
+                    is TypeAliasNode -> internalTypes[el.name] = TypeRef.Alias(el.name)
                     is UseNode -> {
                         el.types.forEach { (name, alias) ->
-                            internalTypes[alias ?: name] = TType.ExternalUse(
+                            internalTypes[alias ?: name] = TypeRef.ExternalUse(
                                 ref = el.name,
                                 typeName = name,
                                 name = alias ?: name,
@@ -29,12 +31,16 @@ class InterfaceScope(val node: InterfaceNode, val world: PackageScope) : Scope2 
                         }
                     }
 
-                    is VariantNode -> internalTypes[el.name] = TType.Record(el.name)
+                    is VariantNode -> internalTypes[el.name] = TypeRef.Variant(el.name)
                 }
             }
     }
 
-    override fun findType(type: Type.Id): TType {
+    fun resolve(){
+
+    }
+
+    override fun findType(type: Type.Id): TypeRef {
         TODO("Not yet implemented")
     }
 }
