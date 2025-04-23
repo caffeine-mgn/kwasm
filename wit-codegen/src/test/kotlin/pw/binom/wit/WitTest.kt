@@ -28,7 +28,20 @@ class WitTest {
 //            }.toList()
 
         val p = ProjectScope.create(File("/tmp/ff/wasi-http/wit"))
+        val artifacts = p.getArtifacts(
+            packageName = PackageNode("wasi", "http", "0.2.5"),
+            worldName = "proxy"
+        )
+        val generator = WasmGenerator(System.out)
+        artifacts.importInterfaces.forEach {
+            val pack = p[it.wit.packageName] ?: TODO()
+            val int = pack.interfaces[it.element.name] ?: TODO()
+            int.types.forEach { (name, type) ->
+                generator.generateType(name = name, type = type)
+            }
+        }
         println(p)
+        println(artifacts)
 //        val dd = p.get(PackageNode("wasi", "http", "0.2.5"), "proxy")
 //        val exports = HashSet<InterfacePath>()
 //        val imports = HashSet<InterfacePath>()
@@ -45,6 +58,7 @@ fun ProjectScope.Companion.create(direction: File): ProjectScope {
         .map { file -> WitPackage.create(file) }
     return ProjectScope((listOf(main) + deps).associateBy { it.packageName })
 }
+
 fun WitProject.Companion.create(direction: File): WitProject {
     val main = WitPackage.create(direction)
     val deps = direction.resolve("deps").listFiles()
