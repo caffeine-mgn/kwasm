@@ -1,0 +1,23 @@
+package binom:pipeline;
+
+interface ololo {
+  record user {
+    name: u32,
+    age: u32,
+    lastname: option<u32>,
+  }
+  resource agent {
+    doit: func()->u32;
+  }
+  variant FFF {
+    aaaa(u32),
+    bbbb(string)
+  }
+  aaa: func() -> list<agent>;
+  bbbbbbbb: func(name:user)->user;
+}
+
+world test {
+    import ololo;
+    import binom:pipeline2/fff;
+}
