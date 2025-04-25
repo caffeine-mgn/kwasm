@@ -9,7 +9,7 @@ data class VariantNode(
     var items: List<Item>,
     var annotations: List<AnnotationNode>,
 ) : VariantVisitor, InterfaceElement {
-    class Item(val name: String, val type: Type?) {
+    data class Item(val name: String, val type: Type?) {
         fun accept(visitor: VariantVisitor) {
             if (type == null) {
                 visitor.element(name)

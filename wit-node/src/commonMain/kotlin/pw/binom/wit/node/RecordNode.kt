@@ -6,11 +6,11 @@ import pw.binom.wit.visitors.TypeVisitor
 
 data class RecordNode(
     var name: String,
-    var fields: Map<String, Type>,
+    var fields: List<Pair<String, Type>>,
     var annotations: List<AnnotationNode>,
 ) : InterfaceElement, RecordVisitor {
 
-    private var argsList: HashMap<String, Type>? = null
+    private var argsList: ArrayList<Pair<String, Type>>? = null
 
     fun accept(visitor: RecordVisitor) {
         visitor.start(name)
@@ -29,12 +29,12 @@ data class RecordNode(
 
     override fun start(name: String) {
         this.name = name
-        argsList = HashMap()
+        argsList = ArrayList()
     }
 
     override fun field(name: String): TypeVisitor {
-        check(!argsList!!.containsKey(name)) { "field $name is already defined" }
-        return Type.Visitor { argsList!![name] = it }
+        check(argsList!!.none { it.first == name }) { "field $name is already defined" }
+        return Type.Visitor { argsList!! += name to it }
     }
 
     override fun end() {

@@ -32,16 +32,19 @@ class WitTest {
             packageName = PackageNode("wasi", "http", "0.2.5"),
             worldName = "proxy"
         )
-        val generator = WasmGenerator(System.out)
-        artifacts.importInterfaces.forEach {
-            val pack = p[it.wit.packageName] ?: TODO()
-            val int = pack.interfaces[it.element.name] ?: TODO()
-            int.types.forEach { (name, type) ->
-                generator.generateType(name = name, type = type)
-            }
-        }
-        println(p)
-        println(artifacts)
+        val resolved = Resolver.resolve(artifacts)
+//        resolved.types.forEach {
+//            println("${it.pack}/${it.name} -> $it")
+//        }
+//        resolved.exportFunctions.forEach { t, u ->
+//            println("EXPORT ${t.first} -> ${t.second}")
+//        }
+//        resolved.importFunctions.forEach { t, u ->
+//            println("IMPORT ${t.first} -> ${t.second}")
+//        }
+        WasmGenerator(System.out).gen(resolved)
+//        println(p)
+//        println(artifacts)
 //        val dd = p.get(PackageNode("wasi", "http", "0.2.5"), "proxy")
 //        val exports = HashSet<InterfacePath>()
 //        val imports = HashSet<InterfacePath>()

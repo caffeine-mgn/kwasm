@@ -43,7 +43,7 @@ data class InterfaceNode(
     }
 
     override fun record(): RecordVisitor {
-        val r = RecordNode("", emptyMap(), tmpAnnotations!!)
+        val r = RecordNode("", emptyList(), tmpAnnotations!!)
         tmpAnnotations = ArrayList()
         tmpElements!! += r
         return r

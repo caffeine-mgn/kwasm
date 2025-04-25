@@ -9,35 +9,35 @@ sealed interface Type {
         val result: (Type) -> Unit,
     ) : ListVisitor by subType {
         override fun end() {
-            super.end()
+            subType.end()
             result(subType)
         }
     }
 
     private class OptionVisitorVisitor(val subType: Option, val result: (Type) -> Unit) : OptionVisitor by subType {
         override fun end() {
-            super.end()
+            subType.end()
             result(subType)
         }
     }
 
     private class BorrowVisitorVisitor(val subType: Borrow, val result: (Type) -> Unit) : BorrowVisitor by subType {
         override fun end() {
-            super.end()
+            subType.end()
             result(subType)
         }
     }
 
     private class TupleVisitorVisitor(val subType: Tuple, val result: (Type) -> Unit) : TupleVisitor by subType {
         override fun end() {
-            super.end()
+            subType.end()
             result(subType)
         }
     }
 
     private class ResultVisitorVisitor(val subType: Result, val result: (Type) -> Unit) : ResultVisitor by subType {
         override fun end() {
-            super.end()
+            subType.end()
             result(subType)
         }
     }

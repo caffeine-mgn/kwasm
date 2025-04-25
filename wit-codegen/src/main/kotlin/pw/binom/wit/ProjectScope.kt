@@ -3,13 +3,17 @@ package pw.binom.wit
 import pw.binom.wit.node.PackageNode
 import pw.binom.wit.node.WorldElement
 
-class ProjectScope(val collections: Map<PackageNode, WitPackage>) {
+class ProjectScope(val collections: Map<PackageNode, WitPackage>) : Scope {
     companion object;
     private val packages = collections.entries.associate { (pack, wit) ->
-        pack to PackageScope(pack, wit)
+        pack.toPackage to PackageScope(
+            parent = this,
+            pack = pack,
+            witPackage = wit
+        )
     }
 
-    operator fun get(pack: PackageNode) = packages[pack]
+    operator fun get(pack: Package) = packages[pack]
 
     fun getArtifacts(
         packageName: PackageNode,
@@ -27,10 +31,12 @@ class ProjectScope(val collections: Map<PackageNode, WitPackage>) {
         return Artifacts(
             exportInterfaces = exports,
             importInterfaces = imports,
+            scope = this,
         )
     }
 
     class Artifacts(
+        val scope: ProjectScope,
         val exportInterfaces: Set<InterfacePath>,
         val importInterfaces: Set<InterfacePath>,
     )
@@ -79,5 +85,14 @@ class ProjectScope(val collections: Map<PackageNode, WitPackage>) {
                 }
             }
         }
+    }
+
+    override fun getType(name: String): NonFinalType {
+        TODO("Not yet implemented")
+    }
+
+    override fun getType(pack: Package, interfaceName: String, name: String): NonFinalType {
+        val scope = packages[pack] ?: TODO("Package $pack not found")
+        return scope.getType(pack = pack, interfaceName = interfaceName, name = name)
     }
 }

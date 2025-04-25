@@ -1,5 +1,6 @@
 package pw.binom.wit.node
 
+import pw.binom.wit.Package
 import pw.binom.wit.visitors.InterfaceVisitor
 import pw.binom.wit.visitors.UseVisitor
 
@@ -22,6 +23,13 @@ data class UseNode(
             val interfaceName: String,
             val version: String?,
         ) : Id {
+            val pack
+                get() = Package(
+                    namespace = module,
+                    packageName = field,
+                    version = version,
+                )
+
             override fun accept(visitor: UseVisitor) {
                 visitor.start(
                     module = module,

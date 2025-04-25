@@ -1,8 +1,12 @@
 package pw.binom.wit.node
 
+import pw.binom.wit.Package
 import pw.binom.wit.visitors.PackageVisitor
 
 data class PackageNode(var module: String, var field: String, var version: String?) : PackageVisitor {
+    val toPackage
+        get() = Package(namespace = module, packageName = field, version = version)
+
     fun accept(visitor: PackageVisitor) {
         visitor.start()
         visitor.moduleName(module)
