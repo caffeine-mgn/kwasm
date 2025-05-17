@@ -1,11 +1,8 @@
 package pw.binom.wasm
 
+import pw.binom.*
 import pw.binom.collections.LinkedList
-import pw.binom.copyTo
 import pw.binom.io.*
-import pw.binom.reverse
-import pw.binom.writeInt
-import pw.binom.writeLong
 
 val Output.asWasm
     get() = StreamWriter(this)
@@ -96,6 +93,12 @@ class StreamWriter(val out: Output) : WasmOutput {
     override fun i32s(value: Int) {
         recording("i32s $value") {
             writeInt(buffer, value.reverse())
+        }
+    }
+
+    override fun i16s(value: Short) {
+        recording("i16s $value") {
+            writeShort(buffer, value.reverse())
         }
     }
 

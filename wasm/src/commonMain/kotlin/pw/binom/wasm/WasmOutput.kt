@@ -5,6 +5,7 @@ import pw.binom.io.*
 interface WasmOutput : Output {
     fun i8u(value: UByte)
     fun i8s(value: Byte)
+    fun i16s(value: Short)
     fun i32s(value: Int)
     fun i64s(value: Long)
     fun v32u(value: UInt)

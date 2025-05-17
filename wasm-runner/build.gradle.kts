@@ -18,11 +18,14 @@ kotlin {
     -"tvosArm64"
     -"iosArm64"
     -"iosSimulatorArm64"
+    -"wasmJs"
   }
+  wasmJs()
   applyDefaultHierarchyTemplate()
   sourceSets {
     commonMain.dependencies {
       api(project(":wasm-node"))
+      api(libs.binom.io.file)
     }
     commonTest.dependencies {
       api(kotlin("test-common"))

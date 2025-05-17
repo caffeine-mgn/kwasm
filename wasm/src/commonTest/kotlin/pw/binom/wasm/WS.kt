@@ -1,10 +1,8 @@
 package pw.binom.wasm
 
-import pw.binom.wasm.visitors.WasmVisitor
-import pw.binom.wasm.writers.CodeSectionWriter
-import pw.binom.wasm.writers.WasmWriter
+import pw.binom.wasm.visitors.WasmModuleVisitor
 
-class WS(val out: WasmVisitor) : WasmVisitor by out {
+class WS(val out: WasmModuleVisitor) : WasmModuleVisitor by out {
   override fun codeSection() = CS(out.codeSection())
 //  override fun codeSection() = CodeSectionWriter(sectionData)
 }

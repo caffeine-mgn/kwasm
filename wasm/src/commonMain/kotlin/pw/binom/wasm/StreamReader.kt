@@ -62,6 +62,11 @@ class StreamReader(
     }
 
     override fun i32s(): Int = readInt(buffer).reverse()
+    override fun i16s(): Short{
+//        val e = readShort()
+//        return e
+        return readShort(buffer).reverse()
+    }
 
     override fun i64s() = readLong(buffer).reverse()
 

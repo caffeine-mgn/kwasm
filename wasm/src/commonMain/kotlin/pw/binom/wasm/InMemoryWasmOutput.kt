@@ -17,6 +17,10 @@ class InMemoryWasmOutput : ByteArrayOutput(), WasmOutput {
         stream.i8s(value)
     }
 
+    override fun i16s(value: Short) {
+        stream.i16s(value)
+    }
+
     override fun i32s(value: Int) {
         stream.i32s(value)
     }

@@ -18,7 +18,9 @@ kotlin {
         -"tvosArm64"
         -"iosArm64"
         -"iosSimulatorArm64"
+        -"wasmJs"
     }
+    wasmJs()
     applyDefaultHierarchyTemplate()
     sourceSets {
         commonMain.dependencies {

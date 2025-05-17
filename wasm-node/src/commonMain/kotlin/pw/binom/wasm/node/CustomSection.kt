@@ -5,7 +5,7 @@ import pw.binom.io.ByteArrayOutput
 import pw.binom.io.Input
 import pw.binom.io.use
 import pw.binom.wasm.visitors.CustomSectionVisitor
-import pw.binom.wasm.visitors.WasmVisitor
+import pw.binom.wasm.visitors.WasmModuleVisitor
 
 class CustomSection : CustomSectionVisitor, MutableList<CustomBlock> by ArrayList() {
 
@@ -30,7 +30,7 @@ class CustomSection : CustomSectionVisitor, MutableList<CustomBlock> by ArrayLis
     super.end()
   }
 
-  fun accept(visitor: WasmVisitor) {
+  fun accept(visitor: WasmModuleVisitor) {
     forEach { block ->
       block.accept(visitor.customSection())
     }

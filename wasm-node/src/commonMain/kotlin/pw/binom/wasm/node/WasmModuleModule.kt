@@ -4,7 +4,7 @@ import pw.binom.wasm.FunctionId
 import pw.binom.wasm.visitors.*
 import kotlin.js.JsName
 
-class WasmModule : WasmVisitor {
+class WasmModuleModule : WasmModuleVisitor {
   var version = 1
   var startFunctionId: FunctionId? = null
 
@@ -98,7 +98,7 @@ class WasmModule : WasmVisitor {
     elementSection.clear()
   }
 
-  fun accept(visitor: WasmVisitor) {
+  fun accept(visitor: WasmModuleVisitor) {
     visitor.start()
     visitor.version(version)
     val startFunctionId = startFunctionId

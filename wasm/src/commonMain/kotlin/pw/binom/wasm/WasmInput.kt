@@ -16,6 +16,7 @@ interface WasmInput : Input {
     fun v64s(): Long
     fun v33u(): ULong
     fun i32s(): Int
+    fun i16s(): Short
     fun i64s(): Long
     fun v33s(firstByte: Byte = i8s()): Long
     fun v1u(): Boolean

@@ -27,10 +27,12 @@ class WitTest {
 //                wit
 //            }.toList()
 
-        val p = ProjectScope.create(File("/tmp/ff/wasi-http/wit"))
+//        val p = ProjectScope.create(File("/tmp/ff/wasi-http/wit"))
+        val p = ProjectScope.create(File("/home/subochev/projects/WORK/kwasm/tmp-wit"))
         val artifacts = p.getArtifacts(
-            packageName = PackageNode("wasi", "http", "0.2.5"),
-            worldName = "proxy"
+//            packageName = PackageNode("wasi", "http", "0.2.5"),
+            packageName = PackageNode("binom", "pipeline",null),
+            worldName = "test"
         )
         val resolved = Resolver.resolve(artifacts)
 //        resolved.types.forEach {
@@ -42,7 +44,7 @@ class WitTest {
 //        resolved.importFunctions.forEach { t, u ->
 //            println("IMPORT ${t.first} -> ${t.second}")
 //        }
-        WasmGenerator(System.out).gen(resolved)
+        WasmGenerator(System.out,WasmGenerator.WordSize.X32).gen(resolved)
 //        println(p)
 //        println(artifacts)
 //        val dd = p.get(PackageNode("wasi", "http", "0.2.5"), "proxy")

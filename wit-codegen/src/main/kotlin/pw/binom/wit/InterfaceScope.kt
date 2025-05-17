@@ -15,9 +15,7 @@ class InterfaceScope(node: InterfaceNode, val parent: PackageScope) : Scope {
 
     init {
         val pack = parent.name
-        node.elements
-            .asSequence()
-            .forEach { el ->
+        node.elements.asSequence().forEach { el ->
                 when (el) {
                     is EnumNode -> {
                         internalAleases[el.name] = FinalType.Enum(
@@ -42,7 +40,10 @@ class InterfaceScope(node: InterfaceNode, val parent: PackageScope) : Scope {
                     is RecordNode -> {
                         val res = FinalType.Record(
                             fields = el.fields.map {
-                                it.first to it.second.toFinalType(this)
+                                FinalType.Record.Field(
+                                    name = it.first,
+                                    type = it.second.toFinalType(this),
+                                )
                             },
                             scope = this,
                             name = el.name,
@@ -119,8 +120,8 @@ class InterfaceScope(node: InterfaceNode, val parent: PackageScope) : Scope {
 
     }
 
-    override fun getType(name: String) = internalAleases[name]
-        ?: TODO("Type ${parent.name}/${this.name}::$name not found")
+    override fun getType(name: String) =
+        internalAleases[name] ?: TODO("Type ${parent.name}/${this.name}::$name not found")
 
     override fun getType(pack: Package, interfaceName: String, name: String): NonFinalType {
         if (pack == this.parent.name && interfaceName == name) {

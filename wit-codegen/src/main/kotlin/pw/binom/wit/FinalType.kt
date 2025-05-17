@@ -1,7 +1,5 @@
 package pw.binom.wit
 
-import pw.binom.wit.node.ResourceNode
-
 sealed interface FinalType : NonFinalType {
     sealed interface Primitive : FinalType {
         data object S8 : Primitive
@@ -68,16 +66,34 @@ sealed interface FinalType : NonFinalType {
     }
 
     data class Record(
-        val fields: List<Pair<String, NonFinalType>>,
+        val fields: List<Field>,
         override val scope: Scope,
         override val name: String,
     ) : FinalType, Struct {
+        data class Field(val name: String, val type: NonFinalType)
+
         override fun accept(visitor: TypeVisitor) {
             visitor.visit(this)
             fields.forEach { (_, type) ->
                 type.accept(visitor)
             }
         }
+
+        fun eachFields(prefix: String = ""): Sequence<Pair<String, NonFinalType>> =
+            sequence {
+                fields.forEach { (name, type) ->
+                    val fieldName = if (prefix.isEmpty()) {
+                        name
+                    } else {
+                        "$prefix.$name"
+                    }
+                    if (type is Record) {
+                        yieldAll(type.eachFields("$fieldName."))
+                    } else {
+                        yield(fieldName to type)
+                    }
+                }
+            }
     }
 
     data class Option(

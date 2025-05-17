@@ -4,17 +4,17 @@ import pw.binom.wasm.FunctionId
 import pw.binom.wasm.InMemoryWasmOutput
 import pw.binom.wasm.Sections
 import pw.binom.wasm.WasmOutput
-import pw.binom.wasm.readers.WasmReader
+import pw.binom.wasm.readers.WasmModuleReader
 import pw.binom.wasm.visitors.*
 
 @OptIn(ExperimentalUnsignedTypes::class)
-class WasmWriter(private val out: WasmOutput) : WasmVisitor {
+class WasmModuleWriter(private val out: WasmOutput) : WasmModuleVisitor {
     private var state = 0
     private var sectionData = InMemoryWasmOutput()
     override fun start() {
         check(state == 0)
         state++
-        WasmReader.MAGIC.forEach { magicByte ->
+        WasmModuleReader.MAGIC.forEach { magicByte ->
             out.i8u(magicByte)
         }
     }
